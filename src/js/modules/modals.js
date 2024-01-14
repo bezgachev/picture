@@ -19,7 +19,6 @@ const modals = () => {
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden';
                 document.body.style.marginRight = `${sroll}px`;
-
             });
         });
 
@@ -57,6 +56,8 @@ const modals = () => {
             if (!display) {
                 document.querySelector(selector).style.display = 'block';
                 document.body.style.overflow = 'hidden';
+                let sroll = calcScroll();
+                document.body.style.marginRight = `${sroll}px`;
             }
 
         }, time);
@@ -79,7 +80,7 @@ const modals = () => {
 
     bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
     bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-    showModalByTime('.popup-consultation', 60000);
+    showModalByTime('.popup-consultation', 3000);
 
 };
 
