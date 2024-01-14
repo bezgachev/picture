@@ -1,4 +1,5 @@
 const modals = () => {
+    let btnPressed = false;
     function bindModal(triggerSelector, modalSelector, closeSelector, destroy = false) {
         const trigger = document.querySelectorAll(triggerSelector),
               modal = document.querySelector(modalSelector),
@@ -12,6 +13,8 @@ const modals = () => {
                     e.preventDefault();
                 }
 
+                btnPressed = true;
+
                 // удаление триггера. в данном случае, удаляем подарок-акцию
                 if (destroy) {
                     item.remove();
@@ -19,6 +22,7 @@ const modals = () => {
     
                 windows.forEach(item => {
                     item.style.display = 'none';
+                    item.classList.add('animated', 'fadeIn');
                 });
 
                 modal.style.display = 'block';
@@ -83,9 +87,21 @@ const modals = () => {
         return scrollWidth;
     }
 
+    function openByScroll(selector) {
+        window.addEventListener('scroll', () => {
+            // для оптимизации старых браузеров, для частичных и стандартных совместимости
+            let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+            if (!btnPressed && (window.scrollY + document.documentElement.clientHeight >= scrollHeight - 1)) {
+                document.querySelector(selector).click();
+            }
+        });
+    }
+
     bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
     bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
     bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+    openByScroll('.fixed-gift');
     showModalByTime('.popup-consultation', 60000);
 
 };
