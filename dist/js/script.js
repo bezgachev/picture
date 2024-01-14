@@ -13,7 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const modals = () => {
-  function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
+  function bindModal(triggerSelector, modalSelector, closeSelector, destroy = false) {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector),
@@ -23,6 +23,11 @@ const modals = () => {
       item.addEventListener('click', e => {
         if (e.target) {
           e.preventDefault();
+        }
+
+        // удаление триггера. в данном случае, удаляем подарок-акцию
+        if (destroy) {
+          item.remove();
         }
         windows.forEach(item => {
           item.style.display = 'none';
@@ -40,7 +45,7 @@ const modals = () => {
       document.body.style.marginRight = '0px';
     });
     modal.addEventListener('click', e => {
-      if (e.target === modal && closeClickOverlay) {
+      if (e.target === modal) {
         windows.forEach(item => {
           item.style.display = 'none';
         });
@@ -78,7 +83,8 @@ const modals = () => {
   }
   bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
   bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-  showModalByTime('.popup-consultation', 3000);
+  bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+  showModalByTime('.popup-consultation', 60000);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modals);
 

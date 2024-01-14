@@ -1,5 +1,5 @@
 const modals = () => {
-    function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
+    function bindModal(triggerSelector, modalSelector, closeSelector, destroy = false) {
         const trigger = document.querySelectorAll(triggerSelector),
               modal = document.querySelector(modalSelector),
               close = document.querySelector(closeSelector),
@@ -10,6 +10,11 @@ const modals = () => {
             item.addEventListener('click', (e) => {
                 if (e.target) {
                     e.preventDefault();
+                }
+
+                // удаление триггера. в данном случае, удаляем подарок-акцию
+                if (destroy) {
+                    item.remove();
                 }
     
                 windows.forEach(item => {
@@ -32,7 +37,7 @@ const modals = () => {
         });
 
         modal.addEventListener('click', (e) => {
-            if (e.target === modal && closeClickOverlay) {
+            if (e.target === modal) {
                 windows.forEach(item => {
                     item.style.display = 'none';
                 });
@@ -80,7 +85,8 @@ const modals = () => {
 
     bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
     bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-    showModalByTime('.popup-consultation', 3000);
+    bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+    showModalByTime('.popup-consultation', 60000);
 
 };
 
