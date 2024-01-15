@@ -1,19 +1,17 @@
 {
-  "posts": [
+  "designer": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "upload": {},
+      "id": 1
     }
   ],
-  "comments": [
+  "question": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "name": "Ivan",
+      "phone": "+7-999-999-00-00",
+      "email": "i.bezgachev@yandex.ru",
+      "message": "Test",
+      "id": 1
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }
