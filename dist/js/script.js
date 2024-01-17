@@ -158,6 +158,9 @@ const mask = selector => {
     this.value = matrix.replace(/./g, function (a) {
       return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
     });
+    if (!e.target.hasAttribute('inputmode')) {
+      e.target.setAttribute('inputmode', 'numeric');
+    }
     if (e.type === 'blur') {
       if (this.value.length == 2) {
         this.value = '';
