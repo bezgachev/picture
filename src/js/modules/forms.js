@@ -19,18 +19,6 @@ const forms = () => {
         question: 'http://localhost:3000/question'
     };
 
-    // const postData = async (url, data) => {
-    //     let res = await fetch(url, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: data
-    //     });
-        
-    //     return await res.json();
-    // };
-
     const clearInputs = () => {
         inputs.forEach(item => {
             item.value = '';
@@ -75,7 +63,7 @@ const forms = () => {
 
             const formData = new FormData(item);
             let api;
-            item.closest('.popup-design') || item.classList.contains('clac_form') ? api = path.designer : api = path.question;
+            item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
 
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
             postData(api, json)
