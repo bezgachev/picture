@@ -1,3 +1,5 @@
+import {postData} from '../services/requests';
+
 const forms = () => {
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
@@ -17,17 +19,17 @@ const forms = () => {
         question: 'http://localhost:3000/question'
     };
 
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: data
-        });
+    // const postData = async (url, data) => {
+    //     let res = await fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: data
+    //     });
         
-        return await res.json();
-    };
+    //     return await res.json();
+    // };
 
     const clearInputs = () => {
         inputs.forEach(item => {

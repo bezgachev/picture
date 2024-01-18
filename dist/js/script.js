@@ -36,6 +36,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
 const forms = () => {
   const form = document.querySelectorAll('form'),
     inputs = document.querySelectorAll('input'),
@@ -52,16 +54,19 @@ const forms = () => {
     designer: 'http://localhost:3000/designer',
     question: 'http://localhost:3000/question'
   };
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: data
-    });
-    return await res.json();
-  };
+
+  // const postData = async (url, data) => {
+  //     let res = await fetch(url, {
+  //         method: 'POST',
+  //         headers: {
+  //             'Content-Type': 'application/json'
+  //         },
+  //         body: data
+  //     });
+
+  //     return await res.json();
+  // };
+
   const clearInputs = () => {
     inputs.forEach(item => {
       item.value = '';
@@ -101,7 +106,7 @@ const forms = () => {
       let api;
       item.closest('.popup-design') || item.classList.contains('clac_form') ? api = path.designer : api = path.question;
       const json = JSON.stringify(Object.fromEntries(formData.entries()));
-      postData(api, json).then(res => {
+      (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(api, json).then(res => {
         console.log(res);
         statusImg.setAttribute('src', message.ok);
         textMessage.textContent = message.success;
@@ -291,6 +296,97 @@ const modals = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/showMoreStylesFirst.js":
+/*!***********************************************!*\
+  !*** ./src/js/modules/showMoreStylesFirst.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const showMoreStylesFirst = (trigger, styles) => {
+  const cards = document.querySelectorAll(styles),
+    btn = document.querySelector(trigger);
+  cards.forEach(card => {
+    card.classList.add('animated', 'fadeInUp');
+  });
+  btn.addEventListener('click', () => {
+    cards.forEach(card => {
+      card.classList.remove('hidden-lg', 'hidden-md', 'hidden-sm', 'hidden-xs');
+      card.classList.add('col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+    });
+
+    // В данном случае предпочтительнее не удалять кнопку, а скрывать стилями, чтобы следующая секция блока по дизайну не схлопывалась, т.к. margin отступы имеются у кнопки, иначе дизайн стиль отступов между секциями будет нарушен.
+    // btn.remove();
+
+    btn.style.cssText = `
+            opacity: 0;
+            pointer-events: none;
+        `;
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (showMoreStylesFirst);
+
+/***/ }),
+
+/***/ "./src/js/modules/showMoreStylesSecond.js":
+/*!************************************************!*\
+  !*** ./src/js/modules/showMoreStylesSecond.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+const showMoreStylesSecond = (trigger, styles, wrapper) => {
+  const cards = document.querySelectorAll(styles),
+    btn = document.querySelector(trigger);
+  cards.forEach(card => {
+    card.remove();
+  });
+  btn.addEventListener('click', function () {
+    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResourse)('data/db.json').then(res => {
+      createCards(res.styles);
+      this.style.cssText = `
+                    opacity: 0;
+                    pointer-events: none;
+                `;
+    }).catch(error => {
+      console.log(error);
+      this.textContent = 'Не получилось загрузить. Попробуйте снова';
+      setTimeout(() => {
+        this.textContent = 'Посмотреть больше стилей';
+      }, 5000);
+    }).finally();
+  });
+  function createCards(response) {
+    response.forEach(({
+      src,
+      title,
+      link
+    }) => {
+      let card = document.createElement('div');
+      card.classList.add('animated', 'fadeInUp', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+      card.innerHTML = `
+                <div class="styles-block">
+                    <img src="${src}" alt="style">
+                    <h4>${title}</h4>
+                    <a href="${link}">Подробнее</a>
+                </div>
+            `;
+      document.querySelector(wrapper).appendChild(card);
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (showMoreStylesSecond);
+
+/***/ }),
+
 /***/ "./src/js/modules/sliders.js":
 /*!***********************************!*\
   !*** ./src/js/modules/sliders.js ***!
@@ -359,6 +455,38 @@ const sliders = (slides, dir, prev, next) => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sliders);
+
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getResourse: () => (/* binding */ getResourse),
+/* harmony export */   postData: () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return await res.json();
+};
+const getResourse = async url => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+  return await res.json();
+};
+
 
 /***/ })
 
@@ -430,6 +558,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
+/* harmony import */ var _modules_showMoreStylesFirst__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStylesFirst */ "./src/js/modules/showMoreStylesFirst.js");
+/* harmony import */ var _modules_showMoreStylesSecond__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMoreStylesSecond */ "./src/js/modules/showMoreStylesSecond.js");
+
+
 
 
 
@@ -445,6 +577,12 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
+
+  // Простая подгрузка элементов (1 вариант)
+  // showMoreStylesFirst('.button-styles', '.styles-2');
+
+  // Подгрузка элементов через сервер, точнее db.json (2 вариант)
+  (0,_modules_showMoreStylesSecond__WEBPACK_IMPORTED_MODULE_6__["default"])('.button-styles', '.styles-2', '#styles .row');
 });
 })();
 
