@@ -5,6 +5,7 @@ import mask from "./modules/mask";
 import checkTextInputs from "./modules/checkTextInputs";
 import showMoreStylesFirst from "./modules/showMoreStylesFirst";
 import showMoreStylesSecond from "./modules/showMoreStylesSecond";
+import calc from "./modules/calc";
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -22,4 +23,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Подгрузка элементов через сервер, точнее db.json (2 вариант)
     showMoreStylesSecond('.button-styles', '.styles-2', '#styles .row');
+    calc('#size', '#material', '#options', '.promocode', '.calc-price');
+
 });
