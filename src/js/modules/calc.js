@@ -1,20 +1,32 @@
-const calc = (size, material, options, promocode, result) => {
+const calc = (size, material, options, promocode, result, calcState) => {
     const sizeBlock = document.querySelector(size),
           materialBlock = document.querySelector(material),
           optionsBlock = document.querySelector(options),
           promocodeBlock = document.querySelector(promocode),
           resultBlock = document.querySelector(result);
-
     let sum = 0;
-    const calcFunc = () => {
+    const calcFunc = (e) => {
         sum = Math.round((+sizeBlock.value) * (+materialBlock.value) + (+optionsBlock.value));
+        let target = e.target,
+            resultText;
+
+        if (e.type === 'change') {
+            (+target.value)
+                ? calcState[target.id] = `${target.options[target.selectedIndex].text}: ${target.value}`
+                : delete calcState[target.id];
+        }
 
         if (sizeBlock.value == '' || materialBlock.value == '') {
             resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины';
+            delete calcState['sum'];
         } else if (promocodeBlock.value === 'IWANTPOPART') {
-            resultBlock.textContent = `${Math.round(sum * 0.7)} ₽`;
+            resultText = `${Math.round(sum * 0.7)} ₽`;
+            calcState['sum'] = `${resultText} cо скидкой`;
+            resultBlock.textContent = resultText;
         } else {
-            resultBlock.textContent = `${sum} ₽`;
+            resultText = `${sum} ₽`;
+            calcState['sum'] = resultText;
+            resultBlock.textContent = resultText;
         }
     };
 
@@ -22,7 +34,6 @@ const calc = (size, material, options, promocode, result) => {
     materialBlock.addEventListener('change', calcFunc);
     optionsBlock.addEventListener('change', calcFunc);
     promocodeBlock.addEventListener('input', calcFunc);
-
 };
 
 export default calc;

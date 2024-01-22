@@ -9,11 +9,12 @@ import calc from "./modules/calc";
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
+    let calcState = {};
 
     modals();
     sliders('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
     sliders('.main-slider-item', 'vertical');
-    forms();
+    forms(calcState);
     mask('[name="phone"]');
     checkTextInputs('[name="name"]');
     checkTextInputs('[name="message"]');
@@ -23,6 +24,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Подгрузка элементов через сервер, точнее db.json (2 вариант)
     showMoreStylesSecond('.button-styles', '.styles-2', '#styles .row');
-    calc('#size', '#material', '#options', '.promocode', '.calc-price');
+    calc('#size', '#material', '#options', '.promocode', '.calc-price', calcState);
 
 });

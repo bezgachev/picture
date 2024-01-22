@@ -12,21 +12,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-const calc = (size, material, options, promocode, result) => {
+const calc = (size, material, options, promocode, result, calcState) => {
   const sizeBlock = document.querySelector(size),
     materialBlock = document.querySelector(material),
     optionsBlock = document.querySelector(options),
     promocodeBlock = document.querySelector(promocode),
     resultBlock = document.querySelector(result);
   let sum = 0;
-  const calcFunc = () => {
+  const calcFunc = e => {
     sum = Math.round(+sizeBlock.value * +materialBlock.value + +optionsBlock.value);
+    let target = e.target,
+      resultText;
+    if (e.type === 'change') {
+      +target.value ? calcState[target.id] = `${target.options[target.selectedIndex].text}: ${target.value}` : delete calcState[target.id];
+    }
     if (sizeBlock.value == '' || materialBlock.value == '') {
       resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины';
+      delete calcState['sum'];
     } else if (promocodeBlock.value === 'IWANTPOPART') {
-      resultBlock.textContent = `${Math.round(sum * 0.7)} ₽`;
+      resultText = `${Math.round(sum * 0.7)} ₽`;
+      calcState['sum'] = `${resultText} cо скидкой`;
+      resultBlock.textContent = resultText;
     } else {
-      resultBlock.textContent = `${sum} ₽`;
+      resultText = `${sum} ₽`;
+      calcState['sum'] = resultText;
+      resultBlock.textContent = resultText;
     }
   };
   sizeBlock.addEventListener('change', calcFunc);
@@ -74,7 +84,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
 
-const forms = () => {
+const forms = state => {
   const form = document.querySelectorAll('form'),
     inputs = document.querySelectorAll('input'),
     upload = document.querySelectorAll('[name="upload"]');
@@ -128,6 +138,11 @@ const forms = () => {
       const formData = new FormData(item);
       let api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
+      if (item.classList.contains('calc_form')) {
+        for (let key in state) {
+          formData.append(key, state[key]);
+        }
+      }
       const json = JSON.stringify(Object.fromEntries(formData.entries()));
       (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(api, json).then(res => {
         console.log(res);
@@ -595,10 +610,11 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  let calcState = {};
   (0,_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
-  (0,_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  (0,_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])(calcState);
   (0,_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
@@ -608,7 +624,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Подгрузка элементов через сервер, точнее db.json (2 вариант)
   (0,_modules_showMoreStylesSecond__WEBPACK_IMPORTED_MODULE_6__["default"])('.button-styles', '.styles-2', '#styles .row');
-  (0,_modules_calc__WEBPACK_IMPORTED_MODULE_7__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
+  (0,_modules_calc__WEBPACK_IMPORTED_MODULE_7__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', calcState);
 });
 })();
 
