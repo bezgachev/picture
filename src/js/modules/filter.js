@@ -6,17 +6,18 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
         noItem = document.querySelector(absoluteSelector);
 
     function changeClass(e, action = false) {
-        (action === 'add') ? e.classList.add('active', 'animated', 'fadeIn') : e.classList.remove('active', 'animated', 'fadeIn');
+        let classes = ['active', 'animated', 'fadeIn'];
+        (action === 'remove') ? e.classList.remove(...classes) : e.classList.add(...classes);
     }
 
     function showPortfolio(selector) {
-        (wrapper.querySelector(`.${selector}`)) ? changeClass(noItem) : changeClass(noItem, 'add');
+        (wrapper.querySelector(`.${selector}`)) ? changeClass(noItem, 'remove') : changeClass(noItem);
 
         wrapper.querySelectorAll('div').forEach(item => {
-            changeClass(item);
+            changeClass(item, 'remove');
 
             if (item.classList.contains(selector)) {
-                changeClass(item, 'add');
+                changeClass(item);
             }
         });
     }
@@ -25,7 +26,7 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
         let target = e.target;
         
         if (target && target.tagName == 'LI') {
-            target.parentNode.querySelectorAll('li').forEach(btn => changeClass(btn));
+            target.parentNode.querySelectorAll('li').forEach(btn => changeClass(btn, 'remove'));
             selectorClass = target.className;
 
             target.classList.add('active');
