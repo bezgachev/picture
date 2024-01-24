@@ -74,7 +74,7 @@ gulp.task("watch", () => {
 
 gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js", "copy-data"));
 
-gulp.task("build-prod-js", () => {
+gulp.task("prod", () => {
     return gulp
         .src("./src/js/main.js")
         .pipe(webpack({

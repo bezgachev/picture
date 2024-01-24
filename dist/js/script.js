@@ -72,6 +72,48 @@ const checkTextInputs = selector => {
 
 /***/ }),
 
+/***/ "./src/js/modules/filter.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/filter.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
+  let selectorClass;
+  const menu = document.querySelector(menuSelector),
+    wrapper = document.querySelector(wrapperSelector),
+    noItem = document.querySelector(absoluteSelector);
+  function changeClass(e, action = false) {
+    action === 'add' ? e.classList.add('active', 'animated', 'fadeIn') : e.classList.remove('active', 'animated', 'fadeIn');
+  }
+  menu.addEventListener('click', e => {
+    let target = e.target;
+    if (target && target.tagName == 'LI') {
+      target.parentNode.querySelectorAll('li').forEach(btn => changeClass(btn));
+      selectorClass = target.className;
+      target.classList.add('active');
+      showPortfolio(selectorClass);
+    }
+  });
+  menu.querySelectorAll('li')[0]?.click();
+  function showPortfolio(selector) {
+    wrapper.querySelector(`.${selector}`) ? changeClass(noItem) : changeClass(noItem, 'add');
+    wrapper.querySelectorAll('div').forEach(item => {
+      changeClass(item);
+      if (item.classList.contains(selector)) {
+        changeClass(item, 'add');
+      }
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (filter);
+
+/***/ }),
+
 /***/ "./src/js/modules/forms.js":
 /*!*********************************!*\
   !*** ./src/js/modules/forms.js ***!
@@ -599,6 +641,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showMoreStylesFirst__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStylesFirst */ "./src/js/modules/showMoreStylesFirst.js");
 /* harmony import */ var _modules_showMoreStylesSecond__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMoreStylesSecond */ "./src/js/modules/showMoreStylesSecond.js");
 /* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
+
 
 
 
@@ -625,6 +669,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Подгрузка элементов через сервер, точнее db.json (2 вариант)
   (0,_modules_showMoreStylesSecond__WEBPACK_IMPORTED_MODULE_6__["default"])('.button-styles', '.styles-2', '#styles .row');
   (0,_modules_calc__WEBPACK_IMPORTED_MODULE_7__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', calcState);
+  (0,_modules_filter__WEBPACK_IMPORTED_MODULE_8__["default"])('.portfolio-menu', '.portfolio-wrapper', '.portfolio-no');
 });
 })();
 
