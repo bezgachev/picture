@@ -90,6 +90,15 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
   function changeClass(e, action = false) {
     action === 'add' ? e.classList.add('active', 'animated', 'fadeIn') : e.classList.remove('active', 'animated', 'fadeIn');
   }
+  function showPortfolio(selector) {
+    wrapper.querySelector(`.${selector}`) ? changeClass(noItem) : changeClass(noItem, 'add');
+    wrapper.querySelectorAll('div').forEach(item => {
+      changeClass(item);
+      if (item.classList.contains(selector)) {
+        changeClass(item, 'add');
+      }
+    });
+  }
   menu.addEventListener('click', e => {
     let target = e.target;
     if (target && target.tagName == 'LI') {
@@ -100,15 +109,6 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
     }
   });
   menu.querySelectorAll('li')[0]?.click();
-  function showPortfolio(selector) {
-    wrapper.querySelector(`.${selector}`) ? changeClass(noItem) : changeClass(noItem, 'add');
-    wrapper.querySelectorAll('div').forEach(item => {
-      changeClass(item);
-      if (item.classList.contains(selector)) {
-        changeClass(item, 'add');
-      }
-    });
-  }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (filter);
 

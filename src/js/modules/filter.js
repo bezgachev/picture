@@ -9,6 +9,18 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
         (action === 'add') ? e.classList.add('active', 'animated', 'fadeIn') : e.classList.remove('active', 'animated', 'fadeIn');
     }
 
+    function showPortfolio(selector) {
+        (wrapper.querySelector(`.${selector}`)) ? changeClass(noItem) : changeClass(noItem, 'add');
+
+        wrapper.querySelectorAll('div').forEach(item => {
+            changeClass(item);
+
+            if (item.classList.contains(selector)) {
+                changeClass(item, 'add');
+            }
+        });
+    }
+
     menu.addEventListener('click', (e) => {
         let target = e.target;
         
@@ -22,18 +34,6 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
     });
 
     menu.querySelectorAll('li')[0]?.click();
-
-    function showPortfolio(selector) {
-        (wrapper.querySelector(`.${selector}`)) ? changeClass(noItem) : changeClass(noItem, 'add');
-
-        wrapper.querySelectorAll('div').forEach(item => {
-            changeClass(item);
-
-            if (item.classList.contains(selector)) {
-                changeClass(item, 'add');
-            }
-        });
-    }
 
 }
 
