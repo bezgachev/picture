@@ -32,6 +32,40 @@ const accordion = triggersSelector => {
 
 /***/ }),
 
+/***/ "./src/js/modules/burger.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/burger.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// Пришлось конкретно подстроиться под верстку и ТЗ, чтобы модуль адекватно работал.
+const burger = (menuSelector, burgerSelector) => {
+  const menu = document.querySelector(menuSelector),
+    burgerEl = document.querySelector(burgerSelector);
+  const show = () => menu.style.display = 'block';
+  const hide = () => menu.style.display = 'none';
+  const changeStateMenu = e => {
+    let action = e.type;
+    if (action === 'click' && window.screen.availWidth < 993 || action === 'mouseover') {
+      menu.style.display == 'none' ? show() : hide();
+    } else if (action === 'resize' && window.screen.availWidth > 992 || action === 'mouseout') {
+      hide();
+    }
+  };
+  burgerEl.addEventListener('click', changeStateMenu);
+  burgerEl.parentNode.addEventListener('mouseover', changeStateMenu);
+  burgerEl.parentNode.addEventListener('mouseout', changeStateMenu);
+  window.addEventListener('resize', changeStateMenu);
+  hide();
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (burger);
+
+/***/ }),
+
 /***/ "./src/js/modules/calc.js":
 /*!********************************!*\
   !*** ./src/js/modules/calc.js ***!
@@ -586,7 +620,7 @@ const sliders = (slides, dir, prev, next) => {
     if (dir === 'vertical') {
       paused = setInterval(function () {
         changeSlides(1);
-        items[slideIndex - 1].classList.add('slideInDown');
+        items[slideIndex - 1].classList.add('fadeIn');
       }, 5000);
     } else {
       paused = setInterval(function () {
@@ -714,6 +748,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
 /* harmony import */ var _modules_pictureSize__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/pictureSize */ "./src/js/modules/pictureSize.js");
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
+/* harmony import */ var _modules_burger__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/burger */ "./src/js/modules/burger.js");
+
 
 
 
@@ -746,6 +782,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_filter__WEBPACK_IMPORTED_MODULE_8__["default"])('.portfolio-menu', '.portfolio-wrapper', '.portfolio-no');
   (0,_modules_pictureSize__WEBPACK_IMPORTED_MODULE_9__["default"])('.sizes-block');
   (0,_modules_accordion__WEBPACK_IMPORTED_MODULE_10__["default"])('.accordion-heading');
+  (0,_modules_burger__WEBPACK_IMPORTED_MODULE_11__["default"])('.burger-menu', '.burger');
 });
 })();
 

@@ -45,7 +45,7 @@ const sliders = (slides, dir, prev, next) => {
         if (dir === 'vertical') {
             paused = setInterval(function() {
                 changeSlides(1);
-                items[slideIndex - 1].classList.add('slideInDown');
+                items[slideIndex - 1].classList.add('fadeIn');
             }, 5000);
         } else {
             paused = setInterval(function() {

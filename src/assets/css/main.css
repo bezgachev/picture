@@ -118,6 +118,7 @@ h4 {
   cursor: auto;
   font-family: 'Circe Bold', sans-serif;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 .header .burger img {
   width: 2rem;
