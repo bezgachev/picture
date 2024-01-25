@@ -24,7 +24,6 @@ const filter = (menuSelector, wrapperSelector, absoluteSelector) => {
 
     menu.addEventListener('click', (e) => {
         let target = e.target;
-        
         if (target && target.tagName == 'LI') {
             target.parentNode.querySelectorAll('li').forEach(btn => changeClass(btn, 'remove'));
             selectorClass = target.className;
