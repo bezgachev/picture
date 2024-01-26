@@ -16,6 +16,7 @@
 10. Аккордеон: вопрос-ответ;
 11. Бургер-меню;
 12. Плавный скролл для якорных ссылок;
+13. Drag & Drop загрузка изображения.
 
 Подробное описание ТЗ в формате PDF <a href="https://github.com/bezgachev/picture/blob/main/technical-specification.pdf">по ссылке</a>.
 
@@ -29,3 +30,5 @@ npm i
 gulp
 json-server src/data/db.json
 ```
+
+*Команду для json-server необходимо запустить в новом терминале.*

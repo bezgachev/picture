@@ -1313,6 +1313,13 @@ select:-webkit-autofill:focus {
   transition: 1s all;
 }
 
+.file_upload.drop-area-active div {
+  display: none;
+}
+.file_upload.drop-area-active button {
+  width: 100%;
+}
+
 @media (max-width: 1399px) {
   .paints {
     display: none;
