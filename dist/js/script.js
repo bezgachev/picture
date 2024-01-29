@@ -543,9 +543,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const scrolling = upSelector => {
-  const upElem = document.querySelector(upSelector);
+  const element = document.documentElement,
+    body = document.body,
+    upElem = document.querySelector(upSelector);
+  let links = document.querySelectorAll('[href^="#"]');
   window.addEventListener('scroll', () => {
-    if (document.documentElement.scrollTop > 1650) {
+    let scrollTop = Math.round(element.scrollTop || body.scrollTop);
+    if (scrollTop > 1650) {
       upElem.classList.add('animated', 'fadeIn');
       upElem.classList.remove('fadeOut');
     } else {
@@ -553,26 +557,57 @@ const scrolling = upSelector => {
       upElem.classList.remove('fadeIn');
     }
   });
-
-  // Считаю, что свое решение лучше, т.к. имеет реальный плавный скролл к якорным объектам.
-  // Если использовать решение от автора, то в зависимости от длины скролла, с учетом фикс.скорости,
-  // скролл в некоторых местах будет медленным, где-то очень быстрым, что не есть очень красиво.
-  let links = document.querySelectorAll('[href^="#"]');
   links.forEach(link => {
     link.addEventListener('click', function (event) {
       event.preventDefault();
       let hash = this.hash;
-      if (hash !== '') {
-        let elemRect = document.querySelector(hash).getBoundingClientRect();
-        window.scrollTo({
-          top: elemRect.top,
-          behavior: 'smooth'
-        });
-        const addHash = () => setTimeout(() => location.hash = hash, 500);
-        if (!this.hasAttribute('data-no-hash')) addHash();
-      }
+      if (hash == '') return;
+      doScrolling(this, hash);
     });
   });
+
+  // Считаю, что свое решение лучше, т.к. имеет реальный плавный скролл к якорным объектам.
+  // Если использовать решение от автора, то в зависимости от длины скролла, с учетом фикс.скорости,
+  // скролл в некоторых местах будет медленным, где-то очень быстрым, что не есть очень красиво.
+  // Улучшил оптимизацию по плавному скроллу.
+
+  // В будущем можно экспортировать функцию doScrolling отдельным модулем для того, чтобы можно было управлять скроллом, вызывая ее
+  // по другим событиям, где это необходимо, к примеру, для пагинации в каталоге интернет-магазина или в корзине/оформления заказа.
+  // Также можно доработать, чтобы при скролле к элементу, имелись некоторые отступы, чтобы видимая часть экрана клиента не прилипала близко к якорной ссылке.
+
+  function doScrolling(event, elementSelector, statelocation = false, duration = false) {
+    let startingY = window.scrollY,
+      elementS = document.querySelector(elementSelector),
+      elementY = startingY + elementS.getBoundingClientRect().top,
+      scrollHeight = Math.round(element.scrollHeight || body.scrollHeight),
+      targetY = scrollHeight - elementY < window.innerHeight ? scrollHeight - window.innerHeight : elementY,
+      difference = targetY - startingY,
+      start = null;
+
+    // Easing function: easeInOutCubic
+    // From: https://gist.github.com/gre/1650294
+    let easing = t => {
+      return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+    };
+    if (!difference) return;
+    requestAnimationFrame(step);
+    function step(time) {
+      if (!duration) duration = 1500;
+      if (start === null) start = time;
+      let progress = time - start,
+        percent = easing(Math.min(progress / duration, 1)),
+        scrollPx = startingY + difference * percent;
+      window.scrollTo(0, scrollPx);
+      if (progress < duration) {
+        requestAnimationFrame(step);
+      } else {
+        if (statelocation && !event.hasAttribute('data-no-hash')) {
+          location.hash = elementSelector;
+        }
+      }
+    }
+  }
+  ;
 
   // Ниже представлены скрипты от автора курса
 

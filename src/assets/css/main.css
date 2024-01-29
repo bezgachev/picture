@@ -1319,7 +1319,6 @@ select:-webkit-autofill:focus {
 .file_upload.drop-area-active button {
   width: 100%;
 }
-
 @media (max-width: 1399px) {
   .paints {
     display: none;
